@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.ProjectSplashScreen" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.ProjectSplashScreen.Splash" parent="Theme.SplashScreen">
+        <!-- Set the background color of the splash screen -->
+        <item name="windowSplashScreenBackground">@color/purple_200</item>
+
+        <!-- Set the splash screen icon -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splashscreen2</item>
+
+        <!-- Post splash screen theme -->
+        <item name="postSplashScreenTheme">@style/Theme.ProjectSplashScreen</item>
+    </style>
+</resources>
