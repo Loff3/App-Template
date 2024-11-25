@@ -1,32 +1,57 @@
+// HomeScreen.kt
 package com.example.projectsplashscreen.presentation.HomeScreen
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.projectsplashscreen.data.DataSource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.projectsplashscreen.presentation.common.AppTopBar
-import com.example.projectsplashscreen.presentation.common.DataClass1
 import com.example.projectsplashscreen.presentation.common.ItemList
+import com.example.projectsplashscreen.presentation.jobs.JobSharedViewModel
+import com.example.projectsplashscreen.viewmodel.JobsViewModel
 
-@Preview
 @Composable
 fun HomeScreen(
-    onItemClick: (DataClass1) -> Unit = {}
+    onNavigateToSelectedItem: () -> Unit = {}
 ) {
-    val dataList = DataSource().loadData()
+    val jobsViewModel: JobsViewModel = viewModel()
+    val activity = LocalContext.current as ComponentActivity
+    val sharedViewModel: JobSharedViewModel = viewModel(activity)
+    val uiState by jobsViewModel.jobsState.collectAsState()
+
+    // Fetch jobs on first launch
+    LaunchedEffect(Unit) {
+        jobsViewModel.getJobs(
+            searchParams = com.example.projectsplashscreen.data.JoobleApiService.JobSearchParams(
+                keywords = "it",
+                location = "Stockholm"
+            )
+        )
+    }
+
     Scaffold(
         topBar = {
             AppTopBar(
-                title = "Home",
+                title = "Jobs",
                 canNavigateBack = false
             )
         }
     ) { innerPadding ->
         ItemList(
-            dataList = dataList,
-            onItemClick = onItemClick,
+            jobDataClassList = when (uiState) {
+                is JobsViewModel.UiState.Success -> (uiState as JobsViewModel.UiState.Success).data.jobDataClasses
+                else -> emptyList()
+            },
+            onJobClick = { jobDataClass ->
+                // Store the selected job in the SharedViewModel
+                sharedViewModel.setSelectJob(jobDataClass)
+                // Navigate to SelectedItemScreen
+                onNavigateToSelectedItem()
+            },
             modifier = Modifier.padding(innerPadding)
         )
     }

@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-parcelize")
+
+
 }
 
 android {
@@ -50,8 +53,21 @@ dependencies {
     // Navigation
     implementation(libs.androidx.navigation.compose)
 
-    // Animations
+    // Adaptive window size
+    implementation("androidx.compose.material3:material3-window-size-class")
 
+    // retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
+
+    // Moshi Json
+    implementation("com.squareup.moshi:moshi-kotlin:1.13.0")
+
+    //
+    implementation(libs.okhttp)
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    //Parcebale
 
 
 

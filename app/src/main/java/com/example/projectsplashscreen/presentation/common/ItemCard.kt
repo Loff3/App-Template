@@ -1,6 +1,5 @@
 package com.example.projectsplashscreen.presentation.common
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
@@ -8,52 +7,32 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-
-// The reusable layout of an Item
-
+import com.example.projectsplashscreen.data.JoobleApiService.JobDataClass
 
 @Composable
 fun ItemCard(
-    data: DataClass1,
+    jobDataClass: JobDataClass,
     modifier: Modifier = Modifier,
-    onItemClick: (DataClass1) -> Unit
+    onClick: () -> Unit
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable { onItemClick(data) },
+            .clickable { onClick() },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
-        Row(
-            modifier = Modifier.padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = painterResource(id = data.image),
-                contentDescription = data.description,
-                modifier = Modifier
-                    .size(64.dp)
-                    .clip(MaterialTheme.shapes.small),
-                contentScale = ContentScale.Crop
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Column {
-                Text(
-                    text = data.title,
-                    style = MaterialTheme.typography.titleMedium
-                )
-                Text(
-                    text = data.description,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(text = jobDataClass.title, style = MaterialTheme.typography.titleMedium)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(text = "Company: ${jobDataClass.company ?: "N/A"}", style = MaterialTheme.typography.bodyMedium)
+            Text(text = "Location: ${jobDataClass.location}", style = MaterialTheme.typography.bodySmall)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = jobDataClass.snippet, maxLines = 3, style = MaterialTheme.typography.bodySmall)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = "Apply: ${jobDataClass.link}", color = MaterialTheme.colorScheme.primary)
         }
     }
 }

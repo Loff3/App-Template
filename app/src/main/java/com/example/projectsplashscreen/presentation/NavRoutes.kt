@@ -7,12 +7,12 @@ package com.example.projectsplashscreen.presentation
  */
 object NavRoutes {
     const val HOME_ROUTE = "home"
-    const val DETAIL_ROUTE = "detail"
+    const val SELECTED_ITEM_ROUTE = "selected_item"
 }
 
 /**
  * Arguments used in routes.
  */
 object NavArgs {
-    const val ITEM_ID_ARG = "itemId"
+    const val JOB_ARG = "job"
 }

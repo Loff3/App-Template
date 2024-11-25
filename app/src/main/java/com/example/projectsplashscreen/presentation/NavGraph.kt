@@ -1,17 +1,12 @@
-package com.example.projectsplashscreen.presentation
-
 // NavGraph.kt
+package com.example.projectsplashscreen.presentation
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
-import com.example.projectsplashscreen.data.DataSource
 import com.example.projectsplashscreen.presentation.HomeScreen.HomeScreen
 import com.example.projectsplashscreen.presentation.SelectedItemScreen.SelectedItemScreen
 
@@ -43,17 +38,14 @@ fun AppNavGraph(
             }
         ) {
             HomeScreen(
-                onItemClick = { dataItem ->
-                    navActions.navigateToDetail(dataItem.id)
+                onNavigateToSelectedItem = {
+                    navActions.navigateToSelectedItem()
                 }
             )
         }
-        // Detail Screen
+        // Selected Item Screen
         composable(
-            route = "${NavRoutes.DETAIL_ROUTE}/{${NavArgs.ITEM_ID_ARG}}",
-            arguments = listOf(
-                navArgument(NavArgs.ITEM_ID_ARG) { type = NavType.IntType }
-            ),
+            route = NavRoutes.SELECTED_ITEM_ROUTE,
             enterTransition = {
                 slideInHorizontally(
                     initialOffsetX = { it },
@@ -66,18 +58,10 @@ fun AppNavGraph(
                     animationSpec = tween(300)
                 ) + fadeOut(animationSpec = tween(300))
             }
-        ) { backStackEntry ->
-            val itemId = backStackEntry.arguments?.getInt(NavArgs.ITEM_ID_ARG) ?: return@composable
-            val dataItem = DataSource().loadData().find { it.id == itemId }
-            if (dataItem != null) {
-                SelectedItemScreen(
-                    data = dataItem,
-                    onBack = { navActions.navigateBack() }
-                )
-            } else {
-                // Handle item not found
-                Text("Item not found")
-            }
+        ) {
+            SelectedItemScreen(
+                onBack = { navActions.navigateBack() }
+            )
         }
     }
 }
