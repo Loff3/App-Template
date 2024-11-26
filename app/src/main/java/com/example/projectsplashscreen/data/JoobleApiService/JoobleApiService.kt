@@ -1,10 +1,8 @@
 package com.example.projectsplashscreen.data.JoobleApiService
 
-import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import kotlinx.android.parcel.Parcelize
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -72,19 +70,20 @@ data class JobsRequest(
     @Json(name = "SearchMode") val searchMode: Int? = null,
     @Json(name = "companysearch") val companySearch: Boolean? = null
 )
-@Parcelize
+
 data class JobDataClass(
-    @Json(name = "title") val title: String,
-    @Json(name = "location") val location: String,
-    @Json(name = "snippet") val snippet: String,
-    @Json(name = "salary") val salary: String?,
-    @Json(name = "source") val source: String,
-    @Json(name = "type") val type: String,
-    @Json(name = "link") val link: String,
-    @Json(name = "company") val company: String?,
-    @Json(name = "updated") val updated: String,
-    @Json(name = "id") val id: Long
-) : Parcelable
+    val title: String?,
+    val location: String?,
+    val snippet: String?,
+    val salary: String?,
+    val source: String?,
+    val type: String?,
+    val link: String?,
+    val company: String?,
+    val updated: String?,
+    val id: Long?
+)
+
 
 data class JobsResponse(
     @Json(name = "totalCount") val totalCount: Int,

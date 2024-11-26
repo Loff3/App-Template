@@ -22,25 +22,20 @@ import com.example.projectsplashscreen.presentation.jobs.JobSharedViewModel
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+
 @Composable
 fun SelectedItemScreen(
+    sharedViewModel: JobSharedViewModel,
     onBack: () -> Unit
 ) {
-    // Retrive the job object passed form home screen
-    val context = LocalContext.current
-    val activity = context as ComponentActivity
-    val sharedViewModel: JobSharedViewModel = viewModel(activity)
-
-    // Observe the selected job by using collectAsState(
+    // Observe the selected job
     val job by sharedViewModel.selectedJob.collectAsState()
-    // Delegate to viemodel using "by"
-    // !! tells program that it wont be null even tho its nullable
 
     if (job != null) {
         Scaffold(
             topBar = {
                 AppTopBar(
-                    title = job!!.title,
+                    title = job!!.title ?: "Job Details",
                     canNavigateBack = true,
                     navigateUp = onBack
                 )
@@ -52,20 +47,8 @@ fun SelectedItemScreen(
                     .padding(16.dp)
                     .fillMaxSize()
             ) {
-                // Display job image if available
-                // Assuming you have a drawable resource for jobs; otherwise, you can skip the Image
-                // Image(
-                //     painter = painterResource(id = job.imageResource), // Replace with actual image resource if available
-                //     contentDescription = job.title,
-                //     modifier = Modifier
-                //         .fillMaxWidth()
-                //         .height(200.dp),
-                //     contentScale = ContentScale.Crop
-                // )
-                // Spacer(modifier = Modifier.height(16.dp))
-
                 Text(
-                    text = job!!.title,
+                    text = job!!.title ?: "No Title",
                     style = MaterialTheme.typography.titleLarge
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -75,12 +58,12 @@ fun SelectedItemScreen(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Location: ${job!!.location}",
+                    text = "Location: ${job!!.location ?: "N/A"}",
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Type: ${job!!.type}",
+                    text = "Type: ${job!!.type ?: "N/A"}",
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -90,7 +73,7 @@ fun SelectedItemScreen(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Snippet: ${job!!.snippet}",
+                    text = "Snippet: ${job!!.snippet ?: "No Description"}",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -100,15 +83,25 @@ fun SelectedItemScreen(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
 
-                Text(
-                    text = job!!.link,
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.clickable {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(job!!.link))
-                        context.startActivity(intent)
-
-                    })
+                val link = job!!.link
+                if (!link.isNullOrEmpty()) {
+                    val context = LocalContext.current
+                    Text(
+                        text = link,
+                        color = MaterialTheme.colorScheme.primary,
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.clickable {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+                            context.startActivity(intent)
+                        }
+                    )
+                } else {
+                    Text(
+                        text = "No Link Available",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                    )
+                }
             }
         }
     } else {
@@ -120,14 +113,15 @@ fun SelectedItemScreen(
                     canNavigateBack = true,
                     navigateUp = onBack
                 )
+            },
+            content = {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Error: Could not find job.")
+                }
             }
-        ) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("Error: Could not find job.")
-            }
-        }
+        )
     }
 }

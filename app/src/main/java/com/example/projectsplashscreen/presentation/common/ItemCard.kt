@@ -25,14 +25,25 @@ fun ItemCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = jobDataClass.title, style = MaterialTheme.typography.titleMedium)
+            Text(
+                text = jobDataClass.title ?: "No Title",
+                style = MaterialTheme.typography.titleMedium
+            )
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = "Company: ${jobDataClass.company ?: "N/A"}", style = MaterialTheme.typography.bodyMedium)
-            Text(text = "Location: ${jobDataClass.location}", style = MaterialTheme.typography.bodySmall)
+            Text(
+                text = "Company: ${jobDataClass.company ?: "N/A"}",
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Text(
+                text = "Location: ${jobDataClass.location ?: "N/A"}",
+                style = MaterialTheme.typography.bodySmall
+            )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = jobDataClass.snippet, maxLines = 3, style = MaterialTheme.typography.bodySmall)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Apply: ${jobDataClass.link}", color = MaterialTheme.colorScheme.primary)
+            Text(
+                text = jobDataClass.snippet ?: "No Description",
+                maxLines = 3,
+                style = MaterialTheme.typography.bodySmall
+            )
         }
     }
 }

@@ -4,19 +4,24 @@ package com.example.projectsplashscreen.presentation
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.projectsplashscreen.presentation.HomeScreen.HomeScreen
 import com.example.projectsplashscreen.presentation.SelectedItemScreen.SelectedItemScreen
+import com.example.projectsplashscreen.presentation.jobs.JobSharedViewModel
 
-@OptIn(ExperimentalAnimationApi::class)
+// Passes a shared viewmodel to homescreen and selectedscreen
 @Composable
 fun AppNavGraph(
     navController: NavHostController,
     navActions: NavActions,
     startDestination: String = NavRoutes.HOME_ROUTE
 ) {
+    // Obtain the shared ViewModel at the NavGraph level
+    val sharedViewModel: JobSharedViewModel = viewModel()
+
     NavHost(
         navController = navController,
         startDestination = startDestination
@@ -38,6 +43,7 @@ fun AppNavGraph(
             }
         ) {
             HomeScreen(
+                sharedViewModel = sharedViewModel,
                 onNavigateToSelectedItem = {
                     navActions.navigateToSelectedItem()
                 }
@@ -60,6 +66,7 @@ fun AppNavGraph(
             }
         ) {
             SelectedItemScreen(
+                sharedViewModel = sharedViewModel,
                 onBack = { navActions.navigateBack() }
             )
         }
