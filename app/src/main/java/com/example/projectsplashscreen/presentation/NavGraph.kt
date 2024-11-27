@@ -1,26 +1,38 @@
-// NavGraph.kt
+// AppNavGraph.kt
 package com.example.projectsplashscreen.presentation
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.projectsplashscreen.presentation.HomeScreen.HomeScreen
-import com.example.projectsplashscreen.presentation.SelectedItemScreen.SelectedItemScreen
+import com.example.projectsplashscreen.NavGraphScope
+import com.example.projectsplashscreen.presentation.homescreen.HomeScreen
 import com.example.projectsplashscreen.presentation.jobs.JobSharedViewModel
+import com.example.projectsplashscreen.presentation.selecteditemscreen.SelectedItemScreen
+import org.koin.compose.getKoin
 
-// Passes a shared viewmodel to homescreen and selectedscreen
+import org.koin.core.scope.Scope
+
 @Composable
 fun AppNavGraph(
     navController: NavHostController,
     navActions: NavActions,
     startDestination: String = NavRoutes.HOME_ROUTE
 ) {
-    // Obtain the shared ViewModel at the NavGraph level
-    val sharedViewModel: JobSharedViewModel = viewModel()
+    // Obtain Koin instance
+    val koin = getKoin()
+
+    // Create or get the existing scope for the NavGraph
+    val navGraphScope: Scope = remember {
+        koin.createScope("NavGraphScopeId", NavGraphScope)
+    }
+
+    // Obtain the scoped JobSharedViewModel
+    val sharedViewModel: JobSharedViewModel = navGraphScope.get<JobSharedViewModel>()
 
     NavHost(
         navController = navController,
@@ -43,10 +55,10 @@ fun AppNavGraph(
             }
         ) {
             HomeScreen(
-                sharedViewModel = sharedViewModel,
                 onNavigateToSelectedItem = {
                     navActions.navigateToSelectedItem()
-                }
+                },
+                sharedViewModel = sharedViewModel
             )
         }
         // Selected Item Screen
@@ -66,8 +78,8 @@ fun AppNavGraph(
             }
         ) {
             SelectedItemScreen(
-                sharedViewModel = sharedViewModel,
-                onBack = { navActions.navigateBack() }
+                onBack = { navActions.navigateBack() },
+                sharedViewModel = sharedViewModel
             )
         }
     }

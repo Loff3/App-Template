@@ -1,31 +1,35 @@
 // HomeScreen.kt
-package com.example.projectsplashscreen.presentation.HomeScreen
-
+package com.example.projectsplashscreen.presentation.homescreen
 import androidx.activity.ComponentActivity
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.projectsplashscreen.presentation.common.AppTopBar
 import com.example.projectsplashscreen.presentation.common.ItemList
 import com.example.projectsplashscreen.presentation.jobs.JobSharedViewModel
-import com.example.projectsplashscreen.viewmodel.JobsViewModel
 import androidx.compose.material3.Scaffold
+import androidx.compose.ui.platform.LocalContext
 import com.example.projectsplashscreen.data.JoobleApiService.JobSearchParams
-import com.example.projectsplashscreen.presentation.SearchComponents.GeneralSearchBar
-import com.example.projectsplashscreen.presentation.SearchComponents.LocationSearchBar
-import com.example.projectsplashscreen.presentation.SearchComponents.SearchViewModel
+import com.example.projectsplashscreen.presentation.searchcomponents.GeneralSearchBar
+import com.example.projectsplashscreen.presentation.searchcomponents.LocationSearchBar
+import com.example.projectsplashscreen.presentation.searchcomponents.SearchViewModel
+import com.example.projectsplashscreen.presentation.jobs.JobsViewModel
+import org.koin.androidx.compose.koinViewModel
+
 
 @Composable
 fun HomeScreen(
-    sharedViewModel: JobSharedViewModel,
-    onNavigateToSelectedItem: () -> Unit = {}
+    onNavigateToSelectedItem: () -> Unit,
+    sharedViewModel: JobSharedViewModel
+
 ) {
-    val jobsViewModel: JobsViewModel = viewModel()
-    val searchViewModel: SearchViewModel = viewModel()
+    val jobsViewModel: JobsViewModel = koinViewModel()
+    val searchViewModel: SearchViewModel = koinViewModel()
+
+    // Observe
     val uiState by jobsViewModel.jobsState.collectAsState()
 
     // Observe the search queries
@@ -93,8 +97,8 @@ fun HomeScreen(
 
             // Job List
             ItemList(
-                jobDataClassList = when (uiState) {
-                    is JobsViewModel.UiState.Success -> (uiState as JobsViewModel.UiState.Success).data.jobDataClasses
+                jobDataClassModeList = when (uiState) {
+                    is JobsViewModel.UiState.Success -> (uiState as JobsViewModel.UiState.Success).data.jobDataClassModes
                     else -> emptyList()
                 },
 

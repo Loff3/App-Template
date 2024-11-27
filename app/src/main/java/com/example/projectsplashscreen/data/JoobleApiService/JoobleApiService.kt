@@ -5,6 +5,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
@@ -14,48 +15,14 @@ import retrofit2.http.Path
 
 // NETWORK LAYER
 
-// Singleton object to initialize Retrofit and create the service
-object JoobleApi {
-    val retrofitService: JoobleApiService by lazy {
-        RetrofitClient.retrofit.create(JoobleApiService::class.java)
-    }
-}
-
-// Network Module to configure Retrofit
-object RetrofitClient {
-    private const val BASE_URL = "https://jooble.org/api/"
-
-    // Logging Interceptor for debugging
-    private val loggingInterceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
-    }
-
-    // OkHttpClient with interceptors
-    private val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor) // Remove or adjust level in production
-        .build()
-
-    // Moshi instance for JSON parsing
-    private val moshi = Moshi.Builder()
-        .add(KotlinJsonAdapterFactory()) // Corrected typo
-        .build()
-
-    // Retrofit instance
-    val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .client(okHttpClient)
-        .addConverterFactory(MoshiConverterFactory.create(moshi))
-        .build()
-}
-
-// Define the API Service Interface
+// API Service Interface
 interface JoobleApiService {
     @Headers("Content-Type: application/json")
     @POST("{api_key}")
     suspend fun getJobs(
         @Path("api_key") apiKey: String,
         @Body request: JobsRequest
-    ): JobsResponse
+    ): Response<JobsResponse>
 }
 
 // Data Classes
@@ -71,7 +38,7 @@ data class JobsRequest(
     @Json(name = "companysearch") val companySearch: Boolean? = null
 )
 
-data class JobDataClass(
+data class JobDataClassMode(
     val title: String?,
     val location: String?,
     val snippet: String?,
@@ -87,7 +54,7 @@ data class JobDataClass(
 
 data class JobsResponse(
     @Json(name = "totalCount") val totalCount: Int,
-    @Json(name = "jobs") val jobDataClasses: List<JobDataClass>
+    @Json(name = "jobs") val jobDataClassModes: List<JobDataClassMode>
 )
 
 data class JobSearchParams(

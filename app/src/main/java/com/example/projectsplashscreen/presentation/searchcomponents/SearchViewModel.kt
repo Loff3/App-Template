@@ -1,4 +1,4 @@
-package com.example.projectsplashscreen.presentation.SearchComponents
+package com.example.projectsplashscreen.presentation.searchcomponents
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

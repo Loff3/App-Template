@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -8,6 +10,9 @@ plugins {
 }
 
 android {
+    buildFeatures {
+        buildConfig = true
+    }
     namespace = "com.example.projectsplashscreen"
     compileSdk = 35
 
@@ -19,6 +24,20 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+
+        //load the values from .properties file
+        val keystoreFile = project.rootProject.file("apikey.properties")
+        val properties = Properties()
+        properties.load(keystoreFile.inputStream())
+
+        //return empty key in case something goes wrong
+        val apiKey = properties.getProperty("API_KEY") ?: ""
+
+        buildConfigField(
+            type = "String",
+            name = "API_KEY",
+            value = apiKey)
     }
 
     buildTypes {
@@ -41,7 +60,7 @@ android {
         compose = true
     }
 }
-
+val koin_version = "4.0.0"
 dependencies {
     // Splash
     implementation(libs.androidx.core.splashscreen)
@@ -63,11 +82,19 @@ dependencies {
     // Moshi Json
     implementation("com.squareup.moshi:moshi-kotlin:1.13.0")
 
-    //
+    // Logging
     implementation(libs.okhttp)
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
-    //Parcebale
+    // Koin Dependancy Injection
+    implementation("io.insert-koin:koin-androidx-compose:$koin_version")
+    // Koin Test
+    testImplementation("io.insert-koin:koin-test-junit4:$koin_version")
+    // Koin whatever..
+
+
+
+
 
 
 

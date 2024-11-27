@@ -5,18 +5,18 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.projectsplashscreen.data.JoobleApiService.JobDataClass
+import com.example.projectsplashscreen.data.JoobleApiService.JobDataClassMode
 
 @Composable
 fun ItemList(
-    jobDataClassList: List<JobDataClass>,
+    jobDataClassModeList: List<JobDataClassMode>,
     modifier: Modifier = Modifier,
-    onJobClick: (JobDataClass) -> Unit
+    onJobClick: (JobDataClassMode) -> Unit
 ) {
     LazyColumn(modifier = modifier) {
-        items(jobDataClassList) { jobDataClass ->
+        items(jobDataClassModeList) { jobDataClass ->
             ItemCard(
-                jobDataClass = jobDataClass,
+                jobDataClassMode = jobDataClass,
                 onClick = { onJobClick(jobDataClass) }
             )
         }

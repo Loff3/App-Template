@@ -1,4 +1,4 @@
-package com.example.projectsplashscreen.presentation.SelectedItemScreen
+package com.example.projectsplashscreen.presentation.selecteditemscreen
 
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.snapshotFlow

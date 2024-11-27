@@ -9,11 +9,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.projectsplashscreen.data.JoobleApiService.JobDataClass
+import com.example.projectsplashscreen.data.JoobleApiService.JobDataClassMode
 
 @Composable
 fun ItemCard(
-    jobDataClass: JobDataClass,
+    jobDataClassMode: JobDataClassMode,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
@@ -26,21 +26,21 @@ fun ItemCard(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = jobDataClass.title ?: "No Title",
+                text = jobDataClassMode.title ?: "No Title",
                 style = MaterialTheme.typography.titleMedium
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Company: ${jobDataClass.company ?: "N/A"}",
+                text = "Company: ${jobDataClassMode.company ?: "N/A"}",
                 style = MaterialTheme.typography.bodyMedium
             )
             Text(
-                text = "Location: ${jobDataClass.location ?: "N/A"}",
+                text = "Location: ${jobDataClassMode.location ?: "N/A"}",
                 style = MaterialTheme.typography.bodySmall
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = jobDataClass.snippet ?: "No Description",
+                text = jobDataClassMode.snippet ?: "No Description",
                 maxLines = 3,
                 style = MaterialTheme.typography.bodySmall
             )

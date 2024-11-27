@@ -1,0 +1,27 @@
+
+________ToDo_________
+
+# Använd Kotlins Result class
+
+# Kanske inte använder selectedItemViewmodel, kolla om shared viewmodel replacear den elr vad som h'nder
+
+# Kollajooble api exempel och kolla apiservice om rätt format
+
+# Cache
+
+
+_______BENCHMARKS_________
+
+* Skipped 91 frames! The application may be doing too much work on its main thread. and Davey! duration=1684ms;
+
+* Rate Limiting and Throttling:
+
+  Monitor API Usage: Keep an eye on how frequently your app is making requests to the Jooble API to avoid hitting rate limits.
+
+  Implement Throttling: If necessary, implement throttling mechanisms to control the rate of outgoing requests, especially in scenarios where users might trigger multiple searches in quick succession.
+
+* User Feedback and Loading States:
+
+  Loading Indicators: Provide visual feedback (like progress bars or loading spinners) while network requests are in progress to enhance user experience.
+
+  Empty States: Handle scenarios where searches return no results by informing the user appropriately.
